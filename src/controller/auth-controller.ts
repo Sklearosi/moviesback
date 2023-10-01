@@ -2,10 +2,21 @@ import { Request, Response } from "express";
 import User from "models/User";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import addUserSchema from "../schemas/add-user-schema.js";
 
 export const createUser = async (req: Request, res: Response) => {
-  const { name, email, password, bookmarks } = req.body;
+  const { body } = req;
   try {
+    const validator = await addUserSchema(body);
+
+    const { value, error } = validator.validate(body);
+
+    if (error) {
+      return res.status(401).json(error.details);
+    }
+
+    const { name, email, password } = value;
+
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -13,7 +24,6 @@ export const createUser = async (req: Request, res: Response) => {
       name,
       email,
       password: hashedPassword,
-      bookmarks,
     });
 
     newUser.save();
