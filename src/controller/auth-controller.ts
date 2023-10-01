@@ -3,6 +3,7 @@ import User from "models/User";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import addUserSchema from "../schemas/add-user-schema.js";
+import { sendVerificationLink } from "../mail/edge.js";
 
 export const createUser = async (req: Request, res: Response) => {
   const { body } = req;
@@ -27,6 +28,7 @@ export const createUser = async (req: Request, res: Response) => {
     });
 
     newUser.save();
+    await sendVerificationLink(email, name, "https://www.google.com");
 
     return res.status(201).json(newUser);
   } catch (error) {
