@@ -68,3 +68,9 @@ export const login = async (req: Request, res: Response) => {
     return res.status(401).json(error);
   }
 };
+
+export const getAllUser = async (req: Request, res: Response) => {
+  const data = await User.find();
+
+  return res.status(200).json(data);
+};
