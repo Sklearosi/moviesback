@@ -13,3 +13,19 @@ export interface NewUser {
   email: string;
   password: string;
 }
+
+export interface MovieInfo  {
+  title: string;
+  thumbnail: {
+    regular: {
+      small: string;
+      medium: string;
+      large: string;
+    };
+  };
+  year: number;
+  category: string;
+  rating: string;
+  isBookmarked: boolean;
+  isTrending: boolean;
+};
